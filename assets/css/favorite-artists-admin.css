@@ -1,0 +1,55 @@
+/*/Links/buttons container /*/
+ul.fa-tabs {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0px;
+    list-style: none;
+}
+
+/*/Login & Register Links/*/
+ul.fa-tabs li {
+    background: none;
+    text-align: center;
+    color: var(--darkgreen);
+    font-family: var(--mainfont);
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 0 auto;
+    font-size: 2rem;
+    opacity: 50%;
+    cursor: pointer;
+}
+
+/*/Current and selected link/*/
+ul.fa-tabs li.current {
+    opacity: 1;
+}
+
+/*/Content Class/*/
+.fa-tab-content {
+    display: none;
+    padding: 15px;
+    animation: fadeEffect .5s;
+}
+
+/*/Current Content Class/*/
+.fa-tab-content.current {
+    display: inherit;
+}
+
+.js-add-artist-message {
+    font-size: 16px;
+    margin-top: 15px
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
