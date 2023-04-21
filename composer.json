@@ -1,0 +1,33 @@
+{
+    "require": {
+        "php": ">=7.4",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cartive\\Favorite_Artists\\": [
+                "classes/"
+            ],
+            "Cartive\\Favorite_Artists\\Core\\": [
+                "core/"
+            ],
+            "Cartive\\Favorite_Artists\\Admin\\": [
+                "classes/admin/"
+            ]
+        }
+    },
+    "config": {
+        "platform-check": false
+    },
+    "scripts": {
+        "build": "./scripts/build",
+        "deploy": "./scripts/svn-push",
+        "update-trunk": "./scripts/svn-push --only-trunk",
+        "make-pot": "wp i18n make-pot . languages/favorite-artists.pot",
+        "upgrade-core": "./scripts/upgrade-core"
+    },
+    "wp-plugin-base": {
+        "namespace": "Cartive\\Favorite_Artists",
+        "text-domain": "favorite-artists"
+    }
+}

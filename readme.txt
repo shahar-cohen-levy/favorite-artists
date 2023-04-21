@@ -37,9 +37,6 @@ FROM THE PLUGINS DIRECTORY IN WORDPRESS ADMIN
 
 **Set Spotify's API credentials**
 
-*. Get client ID & Secret from [Spotify](https://developer.spotify.com/documentation/web-api/tutorials/getting-started#create-an-app).
-*. Go to Settings > Favorite Artists > API Settings
-*. Enter client ID & Secret and submit.
-
-
-
+* Get client ID & Secret from https://developer.spotify.com/documentation/web-api/tutorials/getting-started#create-an-app.
+* Go to Settings > Favorite Artists > API Settings
+* Enter client ID & Secret and submit.
