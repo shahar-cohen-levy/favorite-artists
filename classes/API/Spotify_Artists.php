@@ -9,6 +9,8 @@
 
 namespace Cartive\Favorite_Artists\API;
 
+use Peast\Syntax\Exception;
+
 /**
  * Class for retrieving artists object from Spotify.
  */
@@ -31,19 +33,24 @@ class Spotify_Artists {
 	 * @param 'ids' $ids passed.
 	 */
 	public function get_artists_data_spotify( $ids ) {
-
 		$args     = array(
 			'headers' => array( 'Authorization' => 'Bearer ' . $this->token->get_token() ),
 		);
 		$url      = 'https://api.spotify.com/v1/artists?ids=' . $ids;
-		$response = wp_remote_get( $url, $args );
-		$body     = json_decode( wp_remote_retrieve_body( $response ) );
 
-		$status = wp_remote_retrieve_response_code( $response );
-		if ( 200 === $status ) {
-			return $body->artists;
+		try {
+			$response = wp_remote_get( $url, $args );
+			$body     = json_decode( wp_remote_retrieve_body( $response ) );
+
+			if ( null !== $body->artists[0] ) {
+				return $body->artists;
+			}
+			return 404;
+
+		} catch ( \Exception $e ) {
+			return $e->getCode();
 		}
-		return $status;
+
 	}
 
 }

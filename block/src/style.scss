@@ -1,0 +1,14 @@
+.wp-block-cartive-favorite-artists-block {
+
+	> div {
+		display: flex;
+		margin-top: -2rem;
+
+		img {
+			object-fit: cover;
+			min-width: 0;
+			width: 8rem;
+			height: 8rem;
+		}
+	}
+}

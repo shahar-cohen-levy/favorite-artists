@@ -1,0 +1,1 @@
+{"version":3,"file":"index.css","mappings":";;;AACC;EACA;AAAD,C","sources":["webpack://favorite-artists-block/./src/editor.scss"],"sourcesContent":[".wp-block-cartive-favorite-artists-block {\n > div {\n\tmargin-top: 0;\n  }\n}\n"],"names":[],"sourceRoot":""}
