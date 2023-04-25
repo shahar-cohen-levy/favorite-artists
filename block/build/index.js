@@ -34,6 +34,10 @@ __webpack_require__.r(__webpack_exports__);
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
+ * @param {Object}   root0
+ * @param {Object}   root0.attributes
+ * @param {string}   root0.attributes.title
+ * @param {Function} root0.setAttributes
  * @return {WPElement} Element to render.
  */
 function Edit(_ref) {
@@ -43,46 +47,38 @@ function Edit(_ref) {
     },
     setAttributes
   } = _ref;
-  const [isLoading, setLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
-  const [artists, setArtists] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)({});
-  const isStillMounted = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+  const [artists, setArtists] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)();
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    isStillMounted.current = true;
-    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default()({
-      path: '/favorite-artists/v1/get-artists-ids'
-    }).then(ids => {
-      if (isStillMounted.current) {
-        _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default()({
-          path: `/favorite-artists/v1/get-artist-data/${ids}`
-        }).then(artists => {
-          setArtists(artists);
-          setLoading(false);
-        }).catch(() => {
-          setLoading(false);
-          setArtists({});
+    (async () => {
+      try {
+        const ids = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default()({
+          path: '/favorite-artists/v1/get-artists-ids'
         });
+        const artistsData = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default()({
+          path: `/favorite-artists/v1/get-artist-data/${ids}`
+        });
+        setArtists(artistsData);
+        setError(null);
+      } catch (err) {
+        setArtists(null);
+        setError(err);
       }
-    }).catch(() => {
-      if (isStillMounted.current) {
-        setLoading(false);
-      }
-    });
-  }, [setArtists, setLoading, isStillMounted]);
-  if (isLoading) {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)(), "Loading...");
-  }
-  const artistsCards = artists.map((artist, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Card, {
-    key: index
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.CardMedia, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    src: artist.images[0].url
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.CardBody, null, artist.name)));
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
+    })();
+  }, []);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", blockProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Title', 'favorite-artists-block'),
     value: title,
     onChange: newTitle => setAttributes({
       title: String(newTitle)
     })
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, artistsCards));
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, !artists && !error && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Spinner, null), error && error.message, artists && artists.map((artist, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Card, {
+    key: index
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.CardMedia, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: artist.images[0].url,
+    alt: artist.name
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.CardBody, null, artist.name)))));
 }
 
 /***/ }),

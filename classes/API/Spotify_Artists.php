@@ -33,16 +33,16 @@ class Spotify_Artists {
 	 * @param 'ids' $ids passed.
 	 */
 	public function get_artists_data_spotify( $ids ) {
-		$args     = array(
+		$args = array(
 			'headers' => array( 'Authorization' => 'Bearer ' . $this->token->get_token() ),
 		);
-		$url      = 'https://api.spotify.com/v1/artists?ids=' . $ids;
+		$url  = 'https://api.spotify.com/v1/artists?ids=' . $ids;
 
 		try {
 			$response = wp_remote_get( $url, $args );
 			$body     = json_decode( wp_remote_retrieve_body( $response ) );
 
-			if ( null !== $body->artists[0] ) {
+			if ( isset( $body->artists ) && null !== $body->artists[0] ) {
 				return $body->artists;
 			}
 			return 404;

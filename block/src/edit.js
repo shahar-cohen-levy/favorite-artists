@@ -2,8 +2,14 @@ import { __ } from '@wordpress/i18n';
 
 import { useBlockProps } from '@wordpress/block-editor';
 import apiFetch from '@wordpress/api-fetch';
-import { TextControl, Card, CardBody, CardMedia } from '@wordpress/components';
-import { useState, useEffect, useRef } from '@wordpress/element';
+import {
+	TextControl,
+	Card,
+	CardBody,
+	CardMedia,
+	Spinner,
+} from '@wordpress/components';
+import { useState, useEffect } from '@wordpress/element';
 
 import './editor.scss';
 /**
@@ -17,51 +23,31 @@ import './editor.scss';
  * @return {WPElement} Element to render.
  */
 export default function Edit( { attributes: { title }, setAttributes } ) {
-	const [ isLoading, setLoading ] = useState( true );
-	const [ artists, setArtists ] = useState( {} );
-	const isStillMounted = useRef();
-	const props = useBlockProps();
+	const [ artists, setArtists ] = useState( null );
+	const [ error, setError ] = useState( null );
+
+	const blockProps = useBlockProps();
 
 	useEffect( () => {
-		isStillMounted.current = true;
-		apiFetch( { path: '/favorite-artists/v1/get-artists-ids' } )
-			.then( ( ids ) => {
-				if ( isStillMounted.current ) {
-					apiFetch( {
-						path: `/favorite-artists/v1/get-artist-data/${ ids }`,
-					} )
-						.then( ( artistsData ) => {
-							setArtists( artistsData );
-							setLoading( false );
-						} )
-						.catch( () => {
-							setLoading( false );
-							setArtists( {} );
-						} );
-				}
-			} )
-			.catch( () => {
-				if ( isStillMounted.current ) {
-					setLoading( false );
-				}
-			} );
-	}, [ setArtists, setLoading, isStillMounted ] );
-
-	if ( isLoading ) {
-		return <div { ...props }>Loading...</div>;
-	}
-
-	const artistsCards = artists.map( ( artist, index ) => (
-		<Card key={ index }>
-			<CardMedia>
-				<img src={ artist.images[ 0 ].url } alt={ artist.name } />
-			</CardMedia>
-			<CardBody>{ artist.name }</CardBody>
-		</Card>
-	) );
+		( async () => {
+			try {
+				const ids = await apiFetch( {
+					path: '/favorite-artists/v1/get-artists-ids',
+				} );
+				const artistsData = await apiFetch( {
+					path: `/favorite-artists/v1/get-artist-data/${ ids }`,
+				} );
+				setArtists( artistsData );
+				setError( null );
+			} catch ( err ) {
+				setArtists( null );
+				setError( err );
+			}
+		} )();
+	}, [] );
 
 	return (
-		<div { ...props() }>
+		<div { ...blockProps }>
 			<TextControl
 				label={ __( 'Title', 'favorite-artists-block' ) }
 				value={ title }
@@ -69,7 +55,23 @@ export default function Edit( { attributes: { title }, setAttributes } ) {
 					setAttributes( { title: String( newTitle ) } )
 				}
 			/>
-			<div>{ artistsCards }</div>
+			<div>
+				{ ! artists && ! error && <Spinner /> }
+
+				{ error && error.message }
+				{ artists &&
+					artists.map( ( artist, index ) => (
+						<Card key={ index }>
+							<CardMedia>
+								<img
+									src={ artist.images[ 0 ].url }
+									alt={ artist.name }
+								/>
+							</CardMedia>
+							<CardBody>{ artist.name }</CardBody>
+						</Card>
+					) ) }
+			</div>
 		</div>
 	);
 }

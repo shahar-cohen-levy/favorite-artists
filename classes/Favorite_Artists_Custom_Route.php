@@ -71,7 +71,13 @@ class Favorite_Artists_Custom_Route {
 	 */
 	public function fa_get_ids() {
 		$ids = get_option( 'favorite_artists_list' );
-		return rest_ensure_response( $ids );
+		if ( false === $ids ) {
+			return new WP_Error( 404, 'There are no artists in settings, go to Settings > Favorite Artists to add some' );
+		}
+		$response = new WP_REST_Response( $ids );
+		$response->set_status( 200 );
+
+		return $response;
 	}
 
 	/**
@@ -86,7 +92,7 @@ class Favorite_Artists_Custom_Route {
 		$artists     = new Spotify_Artists();
 		$artist_data = $artists->get_artists_data_spotify( $id );
 		if ( 404 === $artist_data ) {
-			return new WP_Error( 'wrong_id', 'This id is not valid', array( 'status' => 404 ) );
+			return new WP_Error( 404, 'This id is not valid' );
 
 		}
 		$response = new WP_REST_Response( $artist_data );
