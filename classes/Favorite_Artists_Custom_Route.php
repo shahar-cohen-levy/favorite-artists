@@ -34,7 +34,7 @@ class Favorite_Artists_Custom_Route {
 						'callback'            => array( $this, 'fa_get_ids' ),
 						'args'                => array(),
 						'permission_callback' => function () {
-							return true;
+							return current_user_can( 'edit_others_posts' );
 						},
 					)
 				);
@@ -54,7 +54,7 @@ class Favorite_Artists_Custom_Route {
 							'id' => array(),
 						),
 						'permission_callback' => function () {
-							return true;
+							return current_user_can( 'edit_others_posts' );
 						},
 					)
 				);
