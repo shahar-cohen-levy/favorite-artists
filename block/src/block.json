@@ -8,6 +8,10 @@
 	"icon": "smiley",
 	"description": "Adds favorite artists to content.",
 	"supports": {
+		"color": {
+			"gradients": true,
+			"text": false
+		},
 		"html": false
 	},
 	"textdomain": "favorite-artists-block",

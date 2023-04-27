@@ -2,13 +2,19 @@
 
 	> div {
 		display: flex;
-		margin-top: -2rem;
 
-		img {
-			object-fit: cover;
-			min-width: 0;
-			width: 8rem;
-			height: 8rem;
+		figure {
+			width: 16ch;
+			margin-top: 0;
+			margin-bottom: 0;
+			flex-basis: 100%;
+
+			img {
+				height: 16ch;
+				width: auto;
+				object-fit: cover;
+				object-position: center center;
+			}
 		}
 	}
 }

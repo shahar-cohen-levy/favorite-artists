@@ -34,9 +34,8 @@
 		echo esc_attr( $args['fa_search_nonce'] )
 		?>
 	" href="#"><?php esc_html_e( 'Search' ); ?></a>
-
+	  <div class="js-add-artist-message"></div>
 	<div class="js-add-artists-section" style="display: none">
-	  <div class="js-add-artist-message"></div><br>
 	  <a class="button button-primary js-favorite-artists-search-save" data-nonce="<?php echo esc_attr( $args['fa_search_nonce'] ); ?>" href="#" ><?php esc_html_e( 'Yes' ); ?>!</a>
 	  <a class="button button-secondary js-favorite-artists-search-reset" href="#"><?php esc_html_e( 'No, I want search again' ); ?></a>
 	</div>
@@ -45,16 +44,18 @@
 
 		<h2><?php esc_html_e( 'Current Artists on your list' ); ?></h2>
 	  <ul>
-		  <?php if ( $args['artists'] ) {
+		  <?php
+			if ( $args['artists'] ) {
 
-			  foreach ( $args['artists'] as $artist ) {
-				  echo '<li>' . esc_html( $artist->name ) . '</li>';
-			  }
-		  } else {
-			  echo '<li class="hide-me">' . esc_html('No artists yet, add some!' ) . '</li>';
-          } ?>
+				foreach ( $args['artists'] as $artist ) {
+					echo '<li><a class="js-favorite-artists-delete" data-nonce=' . esc_attr( $args['fa_search_nonce'] ) . ' data-artist-id=' . esc_html( $artist->id ) . ' href="#"><span class="dashicons dashicons-trash"></span></a><span>' . esc_html( $artist->name ) . '</span></li>';
+				}
+			} else {
+						  echo '<li class="hide-me">' . esc_html( 'No artists yet, add some!' ) . '</li>';
+			}
+			?>
 	  </ul>
-
+		<div class="js-delete-artist-message"></div>
 	</div>
 
   </div>

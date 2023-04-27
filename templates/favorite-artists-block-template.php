@@ -11,7 +11,7 @@
 
 ?>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes(['class'=>'alignwide']) ); ?>>
 	<?php
 	if ( isset( $attributes['title'] ) ) {
 		?>
@@ -30,8 +30,16 @@
 		<?php
 		if ( ! empty( $artists_data ) ) {
 			foreach ( $artists_data as $artist ) {
+				list('height' => $height, 'width' => $width, 'url' => $url) = get_object_vars( $artist->images[0] );
 				?>
-				<img src="<?php echo esc_attr( $artist->images[0]->url ); ?>" alt="<?php echo esc_attr( $artist->name ); ?>">
+					<figure>
+						<img
+								src="<?php echo esc_attr( $url ); ?>"
+								alt="<?php echo esc_attr( $artist->name ); ?>"
+								height="<?php echo esc_attr( $height ); ?>"
+								width="<?php echo esc_attr( $width ); ?>"
+						>
+					</figure>
 				<?php
 			}
 		}

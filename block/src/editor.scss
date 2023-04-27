@@ -1,6 +1,10 @@
 .wp-block-cartive-favorite-artists-block {
 
 	> div {
-		margin-top: 0;
+
+		.card-custom {
+			background-color: transparent;
+			box-shadow: none;
+		}
 	}
 }

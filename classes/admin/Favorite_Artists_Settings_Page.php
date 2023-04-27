@@ -21,7 +21,14 @@ class Favorite_Artists_Settings_Page {
 	 *
 	 * @var array|bool $options
 	 */
-	private $options, $current_ids;
+	private $options;
+
+	 /**
+	  * Holds current ids data.
+	  *
+	  * @var string|null $current_ids
+	  */
+	private $current_ids;
 
 	/**
 	 * Holds the ids of artists to be used to show current artists in options.
@@ -44,6 +51,7 @@ class Favorite_Artists_Settings_Page {
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_scripts' ) );
 		add_action( 'wp_ajax_do_search', array( $this, 'do_search' ) );
 		add_action( 'wp_ajax_save_id', array( $this, 'save_id' ) );
+		add_action( 'wp_ajax_delete_id', array( $this, 'delete_id' ) );
 	}
 	/**
 	 * Add options page
@@ -163,6 +171,28 @@ class Favorite_Artists_Settings_Page {
 				$all_ids = $id;
 			}
 			update_option( 'favorite_artists_list', $all_ids );
+			echo wp_json_encode( $id );
+		}
+		wp_die();
+	}
+
+	/**
+	 * Save artist id ajax callback.
+	 */
+	public function delete_id() {
+		if ( isset( $_REQUEST['nonce'] ) ) {
+			if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'fa_search_nonce' ) ) {
+				exit();
+			}
+		}
+		if ( isset( $_POST['artists_id'] ) ) {
+			$id  = sanitize_text_field( wp_unslash( $_POST['artists_id'] ) );
+			$ids = get_option( 'favorite_artists_list' );
+
+			$updated_ids           = str_replace( $id, '', $ids );
+			$updated_ids_validated = preg_replace( array( '/^,/', '/,$/', '/([,])\1+/' ), array( '', '', '$1' ), $updated_ids );
+
+			update_option( 'favorite_artists_list', $updated_ids_validated );
 			echo wp_json_encode( $id );
 		}
 		wp_die();

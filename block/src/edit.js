@@ -26,7 +26,9 @@ export default function Edit( { attributes: { title }, setAttributes } ) {
 	const [ artists, setArtists ] = useState( null );
 	const [ error, setError ] = useState( null );
 
-	const blockProps = useBlockProps();
+	const blockProps = useBlockProps( {
+		className: 'alignwide',
+	} );
 
 	useEffect( () => {
 		( async () => {
@@ -60,17 +62,27 @@ export default function Edit( { attributes: { title }, setAttributes } ) {
 
 				{ error && error.message }
 				{ artists &&
-					artists.map( ( artist, index ) => (
-						<Card key={ index }>
-							<CardMedia>
-								<img
-									src={ artist.images[ 0 ].url }
-									alt={ artist.name }
-								/>
-							</CardMedia>
-							<CardBody>{ artist.name }</CardBody>
-						</Card>
-					) ) }
+					artists.map( ( artist, index ) => {
+						const { name, images } = artist;
+						const { height, url, width } = images[ 0 ];
+						return (
+							<Card key={ index } className="card-custom">
+								<CardMedia>
+									<figure>
+										<img
+											src={ url }
+											alt={ name }
+											height={ height }
+											width={ width }
+										/>
+									</figure>
+								</CardMedia>
+								<CardBody isBorderless={ true }>
+									{ name }
+								</CardBody>
+							</Card>
+						);
+					} ) }
 			</div>
 		</div>
 	);
