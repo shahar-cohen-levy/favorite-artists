@@ -130,7 +130,7 @@ class Favorite_Artists_Settings_Page {
 		if ( 'settings_page_favorite-artists-settings' !== $hook ) {
 			return;
 		}
-		wp_enqueue_script( 'fav_artists_admin_script', plugin_dir_url( FAVORITE_ARTISTS_PLUGIN_FILE ) . '/assets/js/favorite-artists-admin.js', array(), '1.0', true );
+		wp_enqueue_script( 'fav_artists_admin_script', plugin_dir_url( FAVORITE_ARTISTS_PLUGIN_FILE ) . '/assets/js/admin.js', array(), '1.0', true );
 		wp_enqueue_style( 'fav_artists_admin_styles', plugin_dir_url( FAVORITE_ARTISTS_PLUGIN_FILE ) . '/assets/css/favorite-artists-admin.css', array(), '1.0' );
 	}
 
@@ -143,8 +143,8 @@ class Favorite_Artists_Settings_Page {
 				exit();
 			}
 		}
-		if ( isset( $_POST['artists_query'] ) ) {
-			$query    = sanitize_text_field( wp_unslash( $_POST['artists_query'] ) );
+		if ( isset( $_POST['search_query'] ) ) {
+			$query    = sanitize_text_field( wp_unslash( $_POST['search_query'] ) );
 			$search   = new Spotify_Search();
 			$response = $search->do_search_spotify( $query );
 			echo wp_json_encode( $response );

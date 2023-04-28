@@ -9,15 +9,15 @@
 <div class="wrap">
   <div id="tabsNav">
 	<ul class="fa-tabs">
-	  <li class="fa-tab-link current" data-tab="settings-section">
+	  <li class="fa-tab-link" data-tab="settings-section">
 		<span><?php esc_html_e( 'API Settings' ); ?></span>
 	  </li>
-	  <li class="fa-tab-link" data-tab="artists-section">
+	  <li class="fa-tab-link current" data-tab="artists-section">
 				<span><?php esc_html_e( 'Favorite Artists' ); ?><span>
 	  </li>
 	</ul>
   </div>
-  <form method="post" action="options.php" id="settings-section" class="fa-tab-content current">
+  <form method="post" action="options.php" id="settings-section" class="fa-tab-content">
 
 	<?php
 	settings_fields( 'favorite-artists-settings-group' );
@@ -25,7 +25,7 @@
 	submit_button();
 	?>
   </form>
-  <div class="fa-tab-content" id="artists-section">
+  <div class="fa-tab-content current" id="artists-section">
 	  <h2>Search and add your favorite artists!</h2>
 	<input type="text" id="artists-search" class="js-artists-search-input" name="favorite_artists_options[artists-ids]" value="" />
 	  <a class="button button-primary js-favorite-artists-search-submit" data-nonce="
@@ -35,9 +35,9 @@
 		?>
 	" href="#"><?php esc_html_e( 'Search' ); ?></a>
 	  <div class="js-add-artist-message"></div>
-	<div class="js-add-artists-section" style="display: none">
-	  <a class="button button-primary js-favorite-artists-search-save" data-nonce="<?php echo esc_attr( $args['fa_search_nonce'] ); ?>" href="#" ><?php esc_html_e( 'Yes' ); ?>!</a>
-	  <a class="button button-secondary js-favorite-artists-search-reset" href="#"><?php esc_html_e( 'No, I want search again' ); ?></a>
+	<div>
+	  <a class="button button-primary js-favorite-artists-search-save" style="display: none" data-nonce="<?php echo esc_attr( $args['fa_search_nonce'] ); ?>" href="#" ><?php esc_html_e( 'Yes' ); ?>!</a>
+	  <a class="button button-secondary js-favorite-artists-search-reset" style="display: none" href="#"><?php esc_html_e( 'No, I want search again' ); ?></a>
 	</div>
 
 	<div class="js-artists-list">
