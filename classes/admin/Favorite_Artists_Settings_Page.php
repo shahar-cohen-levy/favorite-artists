@@ -130,8 +130,14 @@ class Favorite_Artists_Settings_Page {
 		if ( 'settings_page_favorite-artists-settings' !== $hook ) {
 			return;
 		}
-		wp_enqueue_script( 'fav_artists_admin_script', plugin_dir_url( FAVORITE_ARTISTS_PLUGIN_FILE ) . '/assets/js/admin.js', array(), '1.0', true );
-		wp_enqueue_style( 'fav_artists_admin_styles', plugin_dir_url( FAVORITE_ARTISTS_PLUGIN_FILE ) . '/assets/css/favorite-artists-admin.css', array(), '1.0' );
+		$css_file_path = glob( plugin_dir_path( FAVORITE_ARTISTS_PLUGIN_FILE ) . '/assets/css/admin.min.*.css' );
+		$css_file_uri  = plugin_dir_url( FAVORITE_ARTISTS_PLUGIN_FILE ) . '/assets/css/' . basename( $css_file_path[0] );
+		wp_enqueue_style( 'admin_css', $css_file_uri, array(), '1' );
+
+		$js_file_path = glob( plugin_dir_path( FAVORITE_ARTISTS_PLUGIN_FILE ) . 'assets/js/admin.min.*.js' );
+		$js_file_uri  = plugin_dir_url( FAVORITE_ARTISTS_PLUGIN_FILE ) . 'assets/js/' . basename( $js_file_path[0] );
+		wp_enqueue_script( 'admin_js', $js_file_uri, null, null, true );
+
 	}
 
 	/**
@@ -166,7 +172,7 @@ class Favorite_Artists_Settings_Page {
 			$id  = sanitize_text_field( wp_unslash( $_POST['artists_id'] ) );
 			$ids = get_option( 'favorite_artists_list' );
 			if ( $ids ) {
-				$all_ids = $ids . ( ',' . $id ?? $id );
+				$all_ids = $ids . ',' . $id;
 			} else {
 				$all_ids = $id;
 			}

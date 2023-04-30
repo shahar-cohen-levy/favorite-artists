@@ -34,13 +34,8 @@
 		echo esc_attr( $args['fa_search_nonce'] )
 		?>
 	" href="#"><?php esc_html_e( 'Search' ); ?></a>
-	  <div class="js-add-artist-message"></div>
-	<div>
-	  <a class="button button-primary js-favorite-artists-search-save" style="display: none" data-nonce="<?php echo esc_attr( $args['fa_search_nonce'] ); ?>" href="#" ><?php esc_html_e( 'Yes' ); ?>!</a>
-	  <a class="button button-secondary js-favorite-artists-search-reset" style="display: none" href="#"><?php esc_html_e( 'No, I want search again' ); ?></a>
-	</div>
-
-	<div class="js-artists-list">
+	  <div class="js-add-artist-message" style="display: none"><img src="/wp-includes/js/thickbox/loadingAnimation.gif" alt="loading"> </div>
+      <div class="js-artists-list">
 
 		<h2><?php esc_html_e( 'Current Artists on your list' ); ?></h2>
 	  <ul>

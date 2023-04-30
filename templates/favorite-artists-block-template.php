@@ -11,7 +11,7 @@
 
 ?>
 
-<div <?php echo wp_kses_data( get_block_wrapper_attributes(['class'=>'alignwide']) ); ?>>
+<div <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => 'alignwide' ) ) ); ?>>
 	<?php
 	if ( isset( $attributes['title'] ) ) {
 		?>

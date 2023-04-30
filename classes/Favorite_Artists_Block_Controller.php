@@ -41,13 +41,15 @@ class Favorite_Artists_Block_Controller {
 	 * @param WP_Block $block_instance The instance of the WP_Block class that represents the block being rendered.
 	 */
 	public function favorite_artist_block_render_callback( array $attributes, string $content, WP_Block $block_instance ) {
-		$ids          = get_option( 'favorite_artists_list' );
-		$artists      = new Spotify_Artists();
-		$artists_data = $artists->get_artists_data_spotify( $ids );
+		$ids = get_option( 'favorite_artists_list' );
+		if ( ! empty( $ids ) ) {
+			$artists      = new Spotify_Artists();
+			$artists_data = $artists->get_artists_data_spotify( $ids );
 
-		ob_start();
-		require FAVORITE_ARTISTS_PLUGIN_ROOT . '/templates/favorite-artists-block-template.php';
-		return ob_get_clean();
+			ob_start();
+			require FAVORITE_ARTISTS_PLUGIN_ROOT . '/templates/favorite-artists-block-template.php';
+			return ob_get_clean();
+		}
 
 	}
 }

@@ -22,10 +22,15 @@
     "@babel/cli": "^7.21.0",
     "@babel/core": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
+    "@wordpress/scripts": "^26.2.0",
     "babel-loader": "^9.1.2",
     "lodash": "^4.17.21",
+    "mini-css-extract-plugin": "^2.7.5",
     "webpack": "^5.81.0",
-    "webpack-cli": "^5.0.2",
-    "@wordpress/scripts": "^26.2.0"
+    "webpack-cli": "^5.0.2"
+  },
+  "dependencies": {
+    "@sweetalert2/theme-wordpress-admin": "^5.0.15",
+    "sweetalert2": "^11.7.3"
   }
 }
