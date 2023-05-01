@@ -5,7 +5,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 	class FavoriteArtistsAdmin {
 		constructor() {
 			this.artistsSection = $( '#artists-section' );
-			this.artistsList = $( '.js-artists-list' );
+			this.artistsListWrapper = $( '.js-artists-list' );
 
 			this.search = $( '.js-favorite-artists-search-submit' );
 			this.searchInput = $( '.js-artists-search-input' );
@@ -16,14 +16,13 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 			this.reset = $( '.js-favorite-artists-search-reset' );
 
 			this.deleteArtist = $( '.js-favorite-artists-delete' );
-			this.deleteMsg = $( '.js-delete-artist-message' );
 
 			this.adminTabs = $( 'ul.fa-tabs li' );
 			this.adminContent = $( '.fa-tab-content' );
 
 			this.search.click( this.handleSearch.bind( this ) );
 
-			this.artistsList.on(
+			this.artistsListWrapper.on(
 				'click',
 				'.js-favorite-artists-delete',
 				this.handleDelete.bind( this )
@@ -49,7 +48,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 					nonce,
 				},
 				success: ( response ) => {
-					if ( response.type === 'artist' ) {
+					if ( response.type === 'success' ) {
 						$( this.searchInput ).val( response.name ).attr( {
 							value: response.id,
 						} );
@@ -65,7 +64,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 								Swal.fire({
 									title: response.name + ' Added!',
 									text:'',
-									timer: 3000,
+									timer: 2000,
                                     icon: 'success',
 									showConfirmButton: false
 									} );
@@ -73,11 +72,19 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 								this._handleReset()
 							}
 						} );
+					} else if ( response.type === 'artist-exists' ) {
+						Swal.fire( response.name + ' is already on your list', '', '');
+						$( this.searchMsg ).hide();
+						this._handleReset()
+					} else if ( response.type === 'empty' ){
+						Swal.fire( 'Search box is empty :(', '', '');
+						$( this.searchMsg ).hide();
+					} else {
+						Swal.fire('Something went wrong, try again', '', '');
+						$( this.searchMsg ).hide();
+						this._handleReset()
 					}
-				},
-				error: () => {
-					Swal.fire( 'Something went wrong, try again please', '', 'info' );
-				},
+				}
 			} );
 		}
 
@@ -89,7 +96,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 				url: ajaxurl,
 				data: { action: 'save_id', artists_id: response.id, nonce },
 				success: () => {
-					$( '.js-artists-list ul li.hide-me' ).hide();
+					$( '.js-artists-list ul li.js-no-artists' ).hide();
 					$( '.js-artists-list ul' ).append(
 						'<li><a class="js-favorite-artists-delete" data-nonce=' +
 							nonce +
@@ -130,7 +137,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 					Swal.fire({
 						title: artistName + ' Deleted!',
 						text:'',
-						timer: 3000,
+						timer: 2000,
 						icon: 'success',
 						showConfirmButton: false
 					} );
@@ -153,6 +160,11 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 				},
 				success: () => {
 					$( thisItem ).closest( 'li' ).remove();
+					// If artists list is empty show 'no artists' msg.
+					if (1 === $( '.js-artists-list ul').children().length) {
+						$( '.js-artists-list ul li.js-no-artists' ).show();
+					}
+
 				},
 				error: () => {
 					Swal.fire( 'Artist not deleted', '', 'info' );

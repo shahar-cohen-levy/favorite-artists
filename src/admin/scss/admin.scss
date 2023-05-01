@@ -53,6 +53,10 @@ ul.fa-tabs li.current {
   text-decoration: none;
 }
 
+.hide-me {
+  display: none;
+}
+
 /* Go from zero to full opacity */
 @keyframes fadeEffect {
   from {
