@@ -1,69 +1,72 @@
-@import '@sweetalert2/theme-wordpress-admin/wordpress-admin.scss';
+@import "@sweetalert2/theme-wordpress-admin/wordpress-admin";
 
-.swal2-title {
-  text-align: center;
+.swal2-title,
+.swal2-html-container {
+	text-align: center;
 }
+
 /*/Links/buttons container /*/
 ul.fa-tabs {
-  display: block;
-  margin: 0 auto;
-  text-align: center;
-  padding: 0px;
-  list-style: none;
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+	padding: 0;
+	list-style: none;
 }
 
 /*/Login & Register Links/*/
 ul.fa-tabs li {
-  background: none;
-  text-align: center;
-  color: var(--darkgreen);
-  font-family: var(--mainfont);
-  display: inline-block;
-  padding: 10px 15px;
-  margin: 0 auto;
-  font-size: 2rem;
-  opacity: 50%;
-  cursor: pointer;
+	background: none;
+	text-align: center;
+	color: var(--darkgreen);
+	font-family: var(--mainfont);
+	display: inline-block;
+	padding: 10px 15px;
+	margin: 0 auto;
+	font-size: 2rem;
+	opacity: 50%;
+	cursor: pointer;
 }
 
 /*/Current and selected link/*/
 ul.fa-tabs li.current {
-  opacity: 1;
+	opacity: 1;
 }
 
 /*/Content Class/*/
 .fa-tab-content {
-  display: none;
-  padding: 15px;
-  animation: fadeEffect .5s;
+	display: none;
+	padding: 15px;
+	animation: fadeEffect 0.5s;
 }
 
 /*/Current Content Class/*/
 .fa-tab-content.current {
-  display: inherit;
+	display: inherit;
 }
 
 .js-add-artist-message {
-  font-size: 16px;
-  margin-top: 15px;
-  margin-bottom: 5px;
+	font-size: 16px;
+	margin-top: 15px;
+	margin-bottom: 5px;
 }
 
 .js-favorite-artists-delete {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 .hide-me {
-  display: none;
+	display: none;
 }
 
 /* Go from zero to full opacity */
 @keyframes fadeEffect {
-  from {
-    opacity: 0;
-  }
 
-  to {
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
 }

@@ -35,13 +35,13 @@ class Spotify_Search {
 		$args     = array(
 			'headers' => array( 'Authorization' => 'Bearer ' . $this->token->get_token() ),
 		);
-		$url      = 'https://api.spotify.com/v1/search?q=' . $query . '&type=artist';
+		$url      = 'https://api.spotify.com/v1/search?q=' . $query . '&type=artist&limit=5';
 		$response = wp_remote_get( $url, $args );
 		$body     = json_decode( wp_remote_retrieve_body( $response ) );
 
 		$status = wp_remote_retrieve_response_code( $response );
 		if ( 200 === $status ) {
-			return $body->artists->items[0];
+			return $body->artists->items;
 		}
 		return $status;
 	}

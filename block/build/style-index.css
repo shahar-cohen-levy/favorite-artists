@@ -5,10 +5,9 @@
   display: flex;
 }
 .wp-block-cartive-favorite-artists-block > div figure {
-  width: 16ch;
-  margin-top: 0;
   margin-bottom: 0;
-  flex-basis: 100%;
+  height: 16ch;
+  position: relative;
 }
 .wp-block-cartive-favorite-artists-block > div figure img {
   height: 16ch;
@@ -17,6 +16,29 @@
      object-fit: cover;
   -o-object-position: center center;
      object-position: center center;
+}
+.wp-block-cartive-favorite-artists-block > div figure figcaption {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease-out;
+}
+.wp-block-cartive-favorite-artists-block > div figure figcaption div {
+  visibility: hidden;
+}
+.wp-block-cartive-favorite-artists-block > div figure figcaption:hover {
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.wp-block-cartive-favorite-artists-block > div figure figcaption:hover div {
+  visibility: visible;
 }
 
 /*# sourceMappingURL=style-index.css.map*/

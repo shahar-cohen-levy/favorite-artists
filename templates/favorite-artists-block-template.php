@@ -39,6 +39,7 @@
 								height="<?php echo esc_attr( $height ); ?>"
 								width="<?php echo esc_attr( $width ); ?>"
 						>
+                        <figcaption><div><?php echo esc_attr( $artist->name ); ?></div></figcaption>
 					</figure>
 				<?php
 			}

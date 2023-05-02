@@ -12,7 +12,7 @@
     "watch": "webpack --mode=development --watch --config webpack-config.js",
     "build": "webpack --mode=production --config webpack-config.js",
     "lint:css": "wp-scripts lint-style",
-    "lint:css:fix": "wp-scripts lint-style --fix",
+    "lint:css:fix": "wp-scripts lint-style ./src/admin/scss --fix",
     "lint:js": "wp-scripts lint-js ./src",
     "lint:js:fix": "wp-scripts lint-js ./src --fix"
   },

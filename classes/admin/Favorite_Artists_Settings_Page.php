@@ -49,7 +49,7 @@ class Favorite_Artists_Settings_Page {
 		add_action( 'admin_menu', array( $this, 'favorite_artists_add_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'favorite_artists_register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_scripts' ) );
-		add_action( 'wp_ajax_do_search', array( $this, 'do_search' ) );
+		add_action( 'wp_ajax_do_search_autocomplete', array( $this, 'do_search_autocomplete' ) );
 		add_action( 'wp_ajax_save_id', array( $this, 'save_id' ) );
 		add_action( 'wp_ajax_delete_id', array( $this, 'delete_id' ) );
 	}
@@ -136,36 +136,47 @@ class Favorite_Artists_Settings_Page {
 
 		$js_file_path = glob( plugin_dir_path( FAVORITE_ARTISTS_PLUGIN_FILE ) . 'assets/js/admin.min.*.js' );
 		$js_file_uri  = plugin_dir_url( FAVORITE_ARTISTS_PLUGIN_FILE ) . 'assets/js/' . basename( $js_file_path[0] );
-		wp_enqueue_script( 'admin_js', $js_file_uri, null, null, true );
+		wp_enqueue_script( 'admin_js', $js_file_uri, array( 'jquery', 'jquery-ui-autocomplete' ), null, true );
+
+		$wp_scripts = wp_scripts();
+		wp_enqueue_style(
+			'jquery-ui-css',
+			'//ajax.googleapis.com/ajax/libs/jqueryui/' . $wp_scripts->registered['jquery-ui-autocomplete']->ver . '/themes/smoothness/jquery-ui.css',
+			false,
+			null,
+			false
+		);
 
 	}
+
 
 	/**
 	 * Search ajax call.
 	 */
-	public function do_search() {
-		if ( isset( $_REQUEST['nonce'] ) ) {
-			if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'fa_search_nonce' ) ) {
-				exit();
-			}
-		}
-		if ( ! empty( $_POST['search_query'] ) ) {
-			$current_ids = get_option( 'favorite_artists_list' );
-			$query       = sanitize_text_field( wp_unslash( $_POST['search_query'] ) );
-			$search      = new Spotify_Search();
-			$response    = $search->do_search_spotify( $query );
-			if ( $response && $response->id && str_contains( $current_ids, $response->id ) ) {
-				$response->type = 'artist-exists';
+	public function do_search_autocomplete() {
+		check_ajax_referer( 'fa_search_nonce', 'security' );
 
-			} else {
-				$response->type = 'success';
+		$search_term = '';
 
-			}
-
+		if ( ! isset( $_REQUEST['term'] ) ) {
+			echo wp_json_encode( array() );
 		} else {
-			$response = ['type' => 'empty'];
+			$search_term = sanitize_text_field( wp_unslash( $_REQUEST['term'] ) );
 		}
-		echo wp_json_encode( $response );
+
+		$suggestions = array();
+		$search      = new Spotify_Search();
+		$query       = $search->do_search_spotify( $search_term );
+		if ( $query ) {
+			foreach ( $query as $artist ) {
+				$suggestions[] = array(
+					'value' => $artist->id,
+					'label' => $artist->name,
+				);
+			}
+		}
+
+		echo wp_json_encode( $suggestions );
 		wp_die();
 	}
 
@@ -181,13 +192,18 @@ class Favorite_Artists_Settings_Page {
 		if ( isset( $_POST['artists_id'] ) ) {
 			$id_to_add   = sanitize_text_field( wp_unslash( $_POST['artists_id'] ) );
 			$current_ids = get_option( 'favorite_artists_list' );
-			if ( $current_ids ) {
-				$all_ids = $current_ids . ',' . $id_to_add;
+
+			if ( str_contains( $current_ids, $id_to_add ) ) {
+				wp_send_json_error( 'They are already on your list' );
 			} else {
-				$all_ids = $id_to_add;
+				if ( $current_ids ) {
+					$all_ids = $current_ids . ',' . $id_to_add;
+				} else {
+					$all_ids = $id_to_add;
+				}
+				update_option( 'favorite_artists_list', $all_ids );
+				wp_send_json_success();
 			}
-			update_option( 'favorite_artists_list', $all_ids );
-			wp_send_json_success();
 		}
 		wp_die();
 	}
